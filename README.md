@@ -69,9 +69,9 @@ By using [localtunnel](https://github.com/localtunnel/localtunnel) we are able t
 
 ### Start the tunnels
 
-You need to start a tunnel for each service. For the PWA app (subdomain must be web-pwa-emp):
+You need to start a tunnel for each service. For the PWA app (subdomain must be web-emp):
 
-`lt --port 3000 --subdomain web-pwa-epm`
+`lt --port 3000 --subdomain web-epm`
 
 For the [UserAuth](https://github.com/enriquemolinari/userauth) service:
 
@@ -95,4 +95,4 @@ REACT_APP_URI_TASK=https://task1.loca.lt
 
 ### Enjoy
 
-Navigate to https://web-pwa-epm.loca.lt/
+Navigate to https://web-epm.loca.lt/
