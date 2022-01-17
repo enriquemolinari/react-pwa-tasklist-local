@@ -13,8 +13,9 @@ export default function AddTask(props) {
   function handleSubmit(e) {
     e.preventDefault();
 
-    fetch(props.apiGwUrl + "/app/tasks", {
+    fetch(props.apiGwUrl + "/tasks", {
       method: "POST",
+      credentials: "include",
       body: JSON.stringify({
         expirationDate: inputsValue.expirationDate,
         taskText: inputsValue.taskText,

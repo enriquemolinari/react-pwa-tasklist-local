@@ -25,8 +25,9 @@ export default class User {
   }
 
   logout() {
-    return fetch(this.apiUrl + "/auth/logout", {
+    return fetch(this.apiUrl + "/logout", {
       method: "POST",
+      credentials: "include",
       headers: {
         "Content-type": "application/json; charset=UTF-8",
       },
@@ -39,8 +40,9 @@ export default class User {
   }
 
   login(userName, password) {
-    return fetch(this.apiUrl + "/auth/login", {
+    return fetch(this.apiUrl + "/login", {
       method: "POST",
+      credentials: "include",
       body: JSON.stringify({
         user: userName,
         pass: password,

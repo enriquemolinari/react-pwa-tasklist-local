@@ -31,7 +31,9 @@ export default function TasksList(props) {
   }, []);
 
   function retrieveTasks() {
-    fetch(props.apiGwUrl + "/app/tasks")
+    fetch(props.apiGwUrl + "/tasks", {
+      credentials: "include",
+    })
       .then((response) => {
         if (response.status === 401) {
           User.current(props.apiGwUrl)
@@ -79,8 +81,9 @@ export default function TasksList(props) {
 
   function handleDelete() {
     setShow(false);
-    fetch(props.apiGwUrl + "/app/tasks", {
+    fetch(props.apiGwUrl + "/tasks", {
       method: "DELETE",
+      credentials: "include",
       body: JSON.stringify({
         idTask: taskToDelete,
       }),
@@ -97,11 +100,12 @@ export default function TasksList(props) {
   }
 
   function handleDoneOrUnDone(e, done, idTask) {
-    let uri = props.apiGwUrl + "/app/tasks/done";
-    if (done) uri = props.apiGwUrl + "/app/tasks/inprogress";
+    let uri = props.apiGwUrl + "/tasks/done";
+    if (done) uri = props.apiGwUrl + "/tasks/inprogress";
 
     fetch(uri, {
       method: "PUT",
+      credentials: "include",
       body: JSON.stringify({
         idTask: idTask,
       }),

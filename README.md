@@ -1,28 +1,41 @@
-# Task List App in React
+# Progressive Web App (React): Task List
 
 ![task-list2](https://user-images.githubusercontent.com/11150895/139749657-0034c62b-4eb1-4210-9fec-7251b8daccda.png)
 
-Task List is a single page application built with React as part of my book [Understanding React](https://leanpub.com/understandingreact). It was built to demonstrate how to do authentication and authorization in a **secure** way.
+Task List is a **Progressive Web App** built with React as part of my book [Implementing PWA with React](https://leanpub.com/understandingreact) (not yet published).
 
-It requires to have it running two services I have wrote: [UserAuth](https://github.com/enriquemolinari/userauth) and [TaskList](https://github.com/enriquemolinari/tasklist). Authentication is implemented using the cookie (HttpOnly, SameSite=strict, Secure) based approach and a [Paseto](https://paseto.io/) token.
+It requires to have it running two services I have wrote: [UserAuth](https://github.com/enriquemolinari/userauth) and [TaskList](https://github.com/enriquemolinari/tasklist). Both services are pretty easy to start, with minimal dependencies.
 
-The react app, and these two back-end services must be accessed through a **reverse proxy** to have the same-origin policy and the SameSite=strict cookie working. Locally, I have used [Kong](https://konghq.com/install/#kong-community), if you want to use the same, below you will find sample configuration.
-
-The book is completely **free** for my students (if you want to read it, just write to me).
-
-# Install and Start
+## Install and Start
 
 - git clone https://github.com/enriquemolinari/react-tasklist.git react-tasklist
 - cd react-tasklist
 - npm install
-- npm start
+- npm run build
+- serve -s build (service worker is only enabled in production environment)
 
-# Users
+## Users
 
 - guser/guser123
 - juser/juser123
 
-# Kong config
+## Using localhost (for your PC)
+
+The pwa app, and the two back-end services must be accessed through a **reverse proxy** to have the same-origin policy and the SameSite=strict cookie working. Locally, I have used [Kong](https://konghq.com/install/#kong-community), if you want to use the same, below you will find sample configuration. Make sure the `.env` file is pointing to the correct reserse proxy port. Below is a sample using port 8000.
+
+```
+# for simple localhost
+REACT_APP_URI_AUTH=http://localhost:8000/auth
+REACT_APP_URI_TASK=http://localhost:8000/app
+
+# for using with localtunnel
+#REACT_APP_URI_AUTH=https://auth1.loca.lt
+#REACT_APP_URI_TASK=https://task1.loca.lt
+```
+
+The book is completely **free** for my students (if you want to read it, just write to me).
+
+### Kong config
 
 ```
 services:
@@ -45,3 +58,41 @@ services:
     paths:
     - /
 ```
+
+## Using LocalTunnel (for your mobile or PC)
+
+By using [localtunnel](https://github.com/localtunnel/localtunnel) we are able to browse the PWA using httpS allowing us to test the application using a **mobile** device. We are also able to share the URL with anyone, as it is a public URL poiting to our local development PC. Check each LocalTunnel section on each service ([UserAuth](https://github.com/enriquemolinari/userauth) and [TaskList](https://github.com/enriquemolinari/tasklist)) to start them correctly.
+
+### Install Localtunnel
+
+`npm install -g localtunnel`
+
+### Start the tunnels
+
+You need to start a tunnel for each service. For the PWA app (subdomain must be web-pwa-emp):
+
+`lt --port 3000 --subdomain web-pwa-epm`
+
+For the [UserAuth](https://github.com/enriquemolinari/userauth) service:
+
+`lt --port 1234 --subdomain auth1`
+
+And for the [TaskList](https://github.com/enriquemolinari/tasklist) service:
+
+`lt --port 1235 --subdomain task1`
+
+Finally, make sure the `.env` file is pointing to the correct tunnel URLs for each service. Below is how they should be:
+
+```
+# for simple localhost
+#REACT_APP_URI_AUTH=http://localhost:8000/auth
+#REACT_APP_URI_TASK=http://localhost:8000/app
+
+# for using with localtunnel
+REACT_APP_URI_AUTH=https://auth1.loca.lt
+REACT_APP_URI_TASK=https://task1.loca.lt
+```
+
+### Enjoy
+
+Navigate to https://web-pwa-epm.loca.lt/

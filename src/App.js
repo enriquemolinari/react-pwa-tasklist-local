@@ -10,23 +10,24 @@ import { Route } from "react-router-dom";
 import PrivateRoute from "./PrivateRoute";
 
 function App() {
-  const apiGwUrl = process.env.REACT_APP_API_GW;
+  const apiAuth = process.env.REACT_APP_URI_AUTH;
+  const apiTask = process.env.REACT_APP_URI_TASK;
 
   return (
     <>
       <Route exact path={"/"}>
-        <Menu apiGwUrl={apiGwUrl} />
+        <Menu apiGwUrl={apiAuth} />
         <Welcome />
       </Route>
       <Route exact path={"/tasklist"}>
-        <Menu apiGwUrl={apiGwUrl} />
+        <Menu apiGwUrl={apiAuth} />
         <PrivateRoute
-          component={<TasksList apiGwUrl={apiGwUrl} />}
+          component={<TasksList apiGwUrl={apiTask} />}
           requiredRoles={["SIMPLE", "ADMIN"]}
         />
       </Route>
       <Route exact path={"/login"}>
-        <Login apiGwUrl={apiGwUrl} />
+        <Login apiGwUrl={apiAuth} />
       </Route>
     </>
   );
