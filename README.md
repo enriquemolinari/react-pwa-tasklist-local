@@ -1,6 +1,6 @@
 # Progressive Web App (React): Task List
 
-![task-list2](https://user-images.githubusercontent.com/11150895/139749657-0034c62b-4eb1-4210-9fec-7251b8daccda.png)
+![pwa-task-screenshot](https://user-images.githubusercontent.com/11150895/149961175-3d8773fc-6b0b-4906-a8eb-08407510eab4.png)
 
 Task List is a **Progressive Web App** built with React as part of my book [Implementing PWA with React](https://leanpub.com/understandingreact) (not yet published).
 

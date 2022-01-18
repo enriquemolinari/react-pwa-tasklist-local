@@ -19,7 +19,7 @@ export default function Menu(props) {
   return (
     <Navbar bg="light" expand="sm">
       <Navbar.Brand href="#">
-        <Link to="/">Understanding React</Link>
+        <Link to="/">PWA with React</Link>
       </Navbar.Brand>
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">

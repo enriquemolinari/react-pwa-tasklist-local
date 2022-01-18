@@ -13,8 +13,7 @@ export default function Welcome() {
           <p>{location.state}</p>
           <p>
             Welcome to the Task List Application. This is to demonstrate how to
-            do authentication and authorization in React (or any SPA
-            Application) in a <b>secure</b> way!
+            create a <b>Progressive Web App</b> with React.
           </p>
         </Card.Body>
       </Card>
