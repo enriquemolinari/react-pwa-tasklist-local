@@ -8,8 +8,8 @@ It requires to have it running two services I have wrote: [UserAuth](https://git
 
 ## Install and Start
 
-- git clone https://github.com/enriquemolinari/react-tasklist.git react-tasklist
-- cd react-tasklist
+- git clone https://github.com/enriquemolinari/react-pwa-tasklist-local react-pwa-tasklist
+- cd react-pwa-tasklist
 - npm install
 - npm run build
 - serve -s build (service worker is only enabled in production environment)
