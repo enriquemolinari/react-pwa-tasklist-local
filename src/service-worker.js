@@ -11,7 +11,7 @@ import { clientsClaim } from "workbox-core";
 import { ExpirationPlugin } from "workbox-expiration";
 import { precacheAndRoute, createHandlerBoundToURL } from "workbox-precaching";
 import { registerRoute } from "workbox-routing";
-import { StaleWhileRevalidate } from "workbox-strategies";
+import { StaleWhileRevalidate, NetworkFirst } from "workbox-strategies";
 
 clientsClaim();
 
@@ -71,3 +71,70 @@ self.addEventListener("message", (event) => {
 });
 
 // Any other custom service worker logic can go here.
+const pluginCallbacks = {
+  handlerDidError: async () => {
+    return new Response('{"tasks":[]}', {
+      headers: { "Content-Type": "application/json" },
+    });
+  },
+  cachedResponseWillBeUsed: async ({ cachedResponse }) => {
+    console.log("The response comes from the cache");
+    return cachedResponse;
+  },
+  fetchDidSucceed: async ({ response }) => {
+    console.log("The response comes from the network");
+    return response;
+  },
+  cacheDidUpdate: async () => {
+    console.log("cache was updated");
+  },
+};
+
+registerRoute(
+  ({ url }) => url.pathname.indexOf("/tasks") !== -1,
+  new NetworkFirst({
+    cacheName: "latest-tasks",
+    networkTimeoutSeconds: 1,
+    plugins: [pluginCallbacks],
+  })
+);
+
+/*
+async function fetchWithTimeout(resource) {
+  const timeout = 1000;
+
+  const controller = new AbortController();
+  const id = setTimeout(() => controller.abort(), timeout);
+  const response = await fetch(resource, {
+    signal: controller.signal,
+  });
+  clearTimeout(id);
+  return response;
+}
+
+self.addEventListener("fetch", (e) => {
+  if (e.request.method === "GET" && e.request.url.indexOf("/tasks") !== -1) {
+    //network first strategy...
+    e.respondWith(
+      fetchWithTimeout(e.request)
+        .then((fetchResponse) => {
+          return caches.open("latest-tasks").then((cache) => {
+            cache.put(e.request, fetchResponse.clone());
+            return fetchResponse;
+          });
+        })
+        //this is execute if offline
+        .catch(() => {
+          return caches.match(e.request).then((response) => {
+            if (response) {
+              return response;
+            }
+            return new Response('{"tasks":[]}', {
+              headers: { "Content-Type": "application/json" },
+            });
+          });
+        })
+    );
+  }
+});
+*/

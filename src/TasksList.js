@@ -9,6 +9,7 @@ import Alert from "react-bootstrap/Alert";
 import { useEffect, useState } from "react";
 import AddTask from "./AddTask";
 import { tasks as tasksService } from "./server/tasks.js";
+import OfflineAlert from "./OfflineAlert";
 
 export default function TasksList(props) {
   const [tasks, setTasks] = useState({ tasks: [] });
@@ -31,7 +32,9 @@ export default function TasksList(props) {
   function retrieveTasks() {
     tasksService
       .retrieveAll()
-      .then((json) => setTasks(json))
+      .then((json) => {
+        setTasks(json);
+      })
       .catch((error) => {
         setError(error);
         return { tasks: [] };
@@ -76,11 +79,14 @@ export default function TasksList(props) {
     tasksService
       .doneOrUndone(done, idTask)
       .then(() => retrieveTasks())
-      .catch((e) => setError(e.msg));
+      .catch((e) => {
+        setError(e.msg);
+      });
   }
 
   return (
     <Container fluid className="mainBody">
+      <OfflineAlert offline={!props.isOnLine} />
       <Alert
         show={error}
         variant="danger"
@@ -104,6 +110,7 @@ export default function TasksList(props) {
                   onChange={(e) => handleDoneOrUnDone(e, t.done, t.id)}
                   checked={t.done}
                   inline={true}
+                  disabled={!props.isOnLine}
                 />
                 {t.done ? <span className="done">{t.text}</span> : t.text}
                 {!t.done && (
@@ -111,19 +118,25 @@ export default function TasksList(props) {
                     <i className="bi bi-clock"></i> {t.expirationDate}
                   </Badge>
                 )}
-                <a
-                  title="delete task"
-                  role="button"
-                  onClick={(e) => handleDeleteOpenConfirm(t.id)}
-                >
-                  <i className="float-right bi bi-trash"></i>
-                </a>
+                {props.isOnLine && (
+                  <a
+                    title="delete task"
+                    role="button"
+                    onClick={(e) => handleDeleteOpenConfirm(t.id)}
+                  >
+                    <i className="float-right bi bi-trash"></i>
+                  </a>
+                )}
               </ListGroup.Item>
             </ListGroup>
           ))}
         </Card.Body>
         <Card.Footer className="text-muted">
-          <Button variant="primary float-right" onClick={handleAddTask}>
+          <Button
+            variant="primary float-right"
+            disabled={!props.isOnLine}
+            onClick={handleAddTask}
+          >
             <i className="bi bi-plus-lg" />
             Add Task
           </Button>

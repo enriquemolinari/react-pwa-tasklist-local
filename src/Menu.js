@@ -1,16 +1,16 @@
 import React from "react";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { users as usersService } from "./server/users.js";
 
 export default function Menu(props) {
   const userName = usersService.userName();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   function handleLogout(e) {
     e.preventDefault();
-    usersService.logout().then(() => history.push("/login"));
+    usersService.logout().then(() => navigate("/login"));
   }
 
   return (
@@ -26,11 +26,14 @@ export default function Menu(props) {
           </Nav.Link>
         </Nav>
         <Nav>
-          {!userName && <Link to="/login">Sign in</Link>}
-          {userName && (
+          {!userName && props.isOnLine && <Link to="/login">Sign in</Link>}
+          {userName && props.isOnLine && (
             <a href="#task" onClick={handleLogout}>
               <i className="bi bi-person-circle"> {userName}</i> (Log out)
             </a>
+          )}
+          {userName && !props.isOnLine && (
+            <i className="bi bi-person-circle"> {userName}</i>
           )}
         </Nav>
       </Navbar.Collapse>

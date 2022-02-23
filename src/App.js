@@ -6,23 +6,34 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import Menu from "./Menu";
 import Login from "./Login";
 import Welcome from "./Welcome";
-import { Route } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
+import { useOffLineDetector } from "@enrique.molinari/react-hook-offline-detector";
 
 function App() {
+  const isOnLine = useOffLineDetector({});
+
   return (
-    <>
-      <Route exact path={"/"}>
-        <Menu />
-        <Welcome />
-      </Route>
-      <Route exact path={"/tasklist"}>
-        <Menu />
-        <TasksList />
-      </Route>
-      <Route exact path={"/login"}>
-        <Login />
-      </Route>
-    </>
+    <Routes>
+      <Route
+        path={"/"}
+        element={
+          <>
+            <Menu isOnLine={isOnLine} />
+            <Welcome />
+          </>
+        }
+      />
+      <Route
+        path={"/tasklist"}
+        element={
+          <>
+            <Menu isOnLine={isOnLine} />
+            <TasksList isOnLine={isOnLine} />
+          </>
+        }
+      />
+      <Route exact path={"/login"} element={<Login />} />
+    </Routes>
   );
 }
 
